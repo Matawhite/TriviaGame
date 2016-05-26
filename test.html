@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
+  </head>
+  <body>
+    <div id="timer"></div>
+  </body>
+  <script type="text/javascript">
+  var number = 5;
+
+  function run(){
+    counter = setInterval(decrement, 1000);
+  }
+
+  function decrement(){
+    number--;
+    $('#timer').html('<h2>' + number + '</h2>');
+    if (number === 0){
+
+      stop()
+    }
+  }
+
+  function stop(){
+    clearInterval(counter);
+  }
+
+  run()
+
+
+
+  </script>
+</html>
