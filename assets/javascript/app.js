@@ -62,6 +62,7 @@ function answerView(indexNum){
       })
     }
   //end Question and Answer view
+
   //Wrong Answer view
   function wrongAnsView(indexNum) {
     stopTimer();
@@ -92,7 +93,8 @@ function answerView(indexNum){
   function scoreboardView(){
     stopTimer();
     var msg =
-    '<p>Wins: ' + score.wins + '</p> <p>Loses: ' + score.loses + '</p>';
+    '<p>Wins: ' + score.wins + '</p> <p>Loses: ' + score.loses + '</p>' +
+    '<p>Questions not answered: ' + score.notAnswered;
     $('#questions').html(msg);
   };
   //end Score Board view
@@ -100,17 +102,19 @@ function answerView(indexNum){
   // Update Timer view
   function timerView(indexNum){
     countDown --
-    $('#timer').html('<h2>' + countDown + '<h2>');
-    if(countDown === 0){
+    if(countDown == 0){
+      stopTimer();
       timesUpView(indexNum);
+    }else{
+      $('#timer').html('<h2>' + countDown + '<h2>');
     }
   };
   //end Update Timer view
   function timesUpView(indexNum){
-    questions.notAnswered ++;
+    score.notAnswered ++;
     $('#timer').empty();
     $('#answers').empty();
-    $('questions').html('<h3>Time is up!</h3>')
+    $('#questions').html('<h3>Time is up!</h3>')
     .append('<p>The correct answer was ' + questions[indexNum].correctAnswer)
     indexNum ++;
     returnToQuestionView(indexNum)
