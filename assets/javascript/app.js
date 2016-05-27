@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-var countDown = 5;
+var countDown = 20;
 
 //Models
 var score = {
@@ -26,7 +26,15 @@ var questions = [
       "String.prototype.fromArray()","Array.prototype.split()",
     ],
     "correctAnswer": "Array.prototype.toString()"
-  }
+  },
+  {"id": 3,
+    "question": "Which function returns a new Array?",
+    "answers": [
+      "Array.prototype.forEach", "String.prototype.filter()",
+      "Array.prototype.map()","Object.prototype.myEach()",
+    ],
+    "correctAnswer": "Array.prototype.map()"
+  },
 ];
 
 //View
@@ -46,13 +54,15 @@ var questions = [
 
   //Question and Answer View
   function questionView(indexNum) {
+      console.log(indexNum)
+      $('#timer').html('<h2>' + countDown + '<h2>');
+      startTimer(indexNum);
       var ask = questions[indexNum].question;
       $('#questions').html(ask);
       answerView(indexNum);
     };
 
 function answerView(indexNum){
-    startTimer(indexNum);
     questions[indexNum].answers.forEach(function(answer){
       $('#answers').append('<li class="question">' + answer + '</li>')
         })
@@ -61,18 +71,18 @@ function answerView(indexNum){
         checkAns(answer, indexNum);
       })
     }
-  //end Question and Answer view
 
-  //Wrong Answer view
-  function wrongAnsView(indexNum) {
+function wrongAnsView(indexNum) {
+
     stopTimer();
     $('#answers').empty();
     $('#timer').empty();
     var msg =
     '<p>Sorry your answer is incorrect<p>' +
     '<p>The correct answer is ' + questions[indexNum].correctAnswer;
+    $('#questions').html(msg);
     indexNum ++;
-    questionView(indexNum);
+    returnToQuestionView(indexNum);
   }
   //end Wrong Answer view
 
@@ -96,6 +106,8 @@ function answerView(indexNum){
     '<p>Wins: ' + score.wins + '</p> <p>Loses: ' + score.loses + '</p>' +
     '<p>Questions not answered: ' + score.notAnswered;
     $('#questions').html(msg);
+    $('#answers').html('<button id="startButtion" class="waves-effect waves-light btn">Play Again?</button>')
+    .on('click',playAgain);
   };
   //end Score Board view
 
@@ -133,13 +145,16 @@ function checkAns(answer, indexNum){
 
  function returnToQuestionView(indexNum){
   if(indexNum >= questions.length){
-    scoreboardView();
+    myTimeOut = setTimeout(function() {
+        scoreboardView();
+     }, 5000);
   }else{
   var newInterval = setTimeout(function() {
       questionView(indexNum);
    }, 5000);
  }
 }
+
 
 function startTimer(indexNum){
   start = setInterval(function(){
@@ -148,8 +163,20 @@ function startTimer(indexNum){
 }
 
 function stopTimer(){
-  countDown = 21;
+  countDown = 20;
   clearInterval(start);
+}
+
+function playAgain(){
+  $('#questons').empty();
+  $('answers').empty();
+  clearInterval(myTimeOut);
+  var score = {
+    wins:0,
+    loses:0,
+    notAnswered: 0
+  };
+  startView()
 }
 
 startView();
