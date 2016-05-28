@@ -49,31 +49,29 @@ var questions = [
       $('#start').empty();
       questionView(indexNum);
     });
-  };
+  }
   //end Start view
 
   //Question and Answer View
   function questionView(indexNum) {
-      console.log(indexNum)
-      $('#timer').html('<h2>' + countDown + '<h2>');
       startTimer(indexNum);
+      $('#timer').html('<h2>' + countDown + '<h2>');
       var ask = questions[indexNum].question;
       $('#questions').html(ask);
       answerView(indexNum);
-    };
+    }
 
 function answerView(indexNum){
     questions[indexNum].answers.forEach(function(answer){
-      $('#answers').append('<li class="question">' + answer + '</li>')
-        })
-      $('.question').on('click', function(){
+      $('#answers').append('<li class="myAns">' + answer + '</li>');
+    });
+      $('.myAns').on('click', function(){
         answer = $(this).text();
         checkAns(answer, indexNum);
-      })
+      });
     }
 
 function wrongAnsView(indexNum) {
-
     stopTimer();
     $('#answers').empty();
     $('#timer').empty();
@@ -108,32 +106,35 @@ function wrongAnsView(indexNum) {
     $('#questions').html(msg);
     $('#answers').html('<button id="startButtion" class="waves-effect waves-light btn">Play Again?</button>')
     .on('click',playAgain);
-  };
+  }
   //end Score Board view
 
   // Update Timer view
   function timerView(indexNum){
-    countDown --
-    if(countDown == 0){
+    countDown --;
+    if(countDown === 0){
       stopTimer();
       timesUpView(indexNum);
     }else{
       $('#timer').html('<h2>' + countDown + '<h2>');
     }
-  };
+  }
   //end Update Timer view
   function timesUpView(indexNum){
     score.notAnswered ++;
     $('#timer').empty();
     $('#answers').empty();
     $('#questions').html('<h3>Time is up!</h3>')
-    .append('<p>The correct answer was ' + questions[indexNum].correctAnswer)
+    .html('<p>The correct answer was ' + questions[indexNum].correctAnswer);
     indexNum ++;
-    returnToQuestionView(indexNum)
+    returnToQuestionView(indexNum);
   }
 
 //Controllers
 function checkAns(answer, indexNum){
+  $('#questions').empty();
+  $('#answers').empty();
+  stopTimer();
   if(answer === questions[indexNum].correctAnswer){
     score.wins ++;
     correctAnsView(answer,indexNum);
@@ -141,14 +142,18 @@ function checkAns(answer, indexNum){
     score.loses ++;
     wrongAnsView(indexNum);
   }
-};
+}
 
+
+
+//Rethink this function
  function returnToQuestionView(indexNum){
-  if(indexNum >= questions.length){
+  if(indexNum > 2){
     myTimeOut = setTimeout(function() {
         scoreboardView();
      }, 5000);
   }else{
+      stopTimer();
   var newInterval = setTimeout(function() {
       questionView(indexNum);
    }, 5000);
@@ -158,7 +163,7 @@ function checkAns(answer, indexNum){
 
 function startTimer(indexNum){
   start = setInterval(function(){
-    timerView(indexNum)
+    timerView(indexNum);
   }, 1000);
 }
 
@@ -168,15 +173,10 @@ function stopTimer(){
 }
 
 function playAgain(){
-  $('#questons').empty();
-  $('answers').empty();
+  $('#questions').empty();
+  $('#answers').empty();
   clearInterval(myTimeOut);
-  var score = {
-    wins:0,
-    loses:0,
-    notAnswered: 0
-  };
-  startView()
+  questionView(0);
 }
 
 startView();
