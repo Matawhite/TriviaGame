@@ -37,9 +37,8 @@ var questions = [
   },
 ];
 
-//View
+//Views
 
-  //Start view
   function startView(){
     var indexNum = 0;
     var  greeting = '<h3>Press Start to Begin</h3>';
@@ -50,9 +49,7 @@ var questions = [
       questionView(indexNum);
     });
   }
-  //end Start view
 
-  //Question and Answer View
   function questionView(indexNum) {
       startTimer(indexNum);
       $('#timer').html('<h2>' + countDown + '<h2>');
@@ -82,9 +79,7 @@ function wrongAnsView(indexNum) {
     indexNum ++;
     returnToQuestionView(indexNum);
   }
-  //end Wrong Answer view
 
-  //Correct Answer view
   function correctAnsView(answer,indexNum){
     stopTimer();
     $('#answers').empty();
@@ -95,9 +90,7 @@ function wrongAnsView(indexNum) {
     indexNum ++;
     returnToQuestionView(indexNum);
   }
-  //end Correct Answer view
 
-  //Score Board view
   function scoreboardView(){
     stopTimer();
     var msg =
@@ -107,9 +100,7 @@ function wrongAnsView(indexNum) {
     $('#answers').html('<button id="startButtion" class="waves-effect waves-light btn">Play Again?</button>')
     .on('click',playAgain);
   }
-  //end Score Board view
 
-  // Update Timer view
   function timerView(indexNum){
     countDown --;
     if(countDown === 0){
@@ -119,18 +110,19 @@ function wrongAnsView(indexNum) {
       $('#timer').html('<h2>' + countDown + '<h2>');
     }
   }
-  //end Update Timer view
+
   function timesUpView(indexNum){
     score.notAnswered ++;
     $('#timer').empty();
     $('#answers').empty();
     $('#questions').html('<h3>Time is up!</h3>')
-    .html('<p>The correct answer was ' + questions[indexNum].correctAnswer);
+    .append('<p>The correct answer was ' + questions[indexNum].correctAnswer);
     indexNum ++;
     returnToQuestionView(indexNum);
   }
 
 //Controllers
+
 function checkAns(answer, indexNum){
   $('#questions').empty();
   $('#answers').empty();
@@ -144,22 +136,18 @@ function checkAns(answer, indexNum){
   }
 }
 
-
-
-//Rethink this function
  function returnToQuestionView(indexNum){
   if(indexNum > 2){
     myTimeOut = setTimeout(function() {
         scoreboardView();
-     }, 5000);
+     }, 3000);
   }else{
       stopTimer();
   var newInterval = setTimeout(function() {
       questionView(indexNum);
-   }, 5000);
+   }, 3000);
  }
 }
-
 
 function startTimer(indexNum){
   start = setInterval(function(){
@@ -173,11 +161,17 @@ function stopTimer(){
 }
 
 function playAgain(){
+  score.wins = 0;
+  score.loses = 0;
+  score.notAnswered = 0;
+  indexNum = 0;
   $('#questions').empty();
   $('#answers').empty();
   clearInterval(myTimeOut);
-  questionView(0);
+  $('#questions').unbind();
+  $('#answers').unbind();
+  questionView(indexNum);
 }
 
 startView();
-}); //do not write below here. End of Document rdy fn
+});
